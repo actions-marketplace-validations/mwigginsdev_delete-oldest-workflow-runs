@@ -1,6 +1,6 @@
-name: 'Delete workflow runs'
-description: 'An action to delete workflow runs in a repository.'
-author: 'Bright Ran'
+name: 'Delete oldest runs for workflow'
+description: 'An action to delete the oldest runs for a specific workflow and other than a specific minimum number of runs.'
+author: 'Matt Wiggins'
 
 inputs:
   token:
@@ -13,10 +13,10 @@ inputs:
     required: true
     default: ${{ github.repository }}
 
-  retain_days:
-    description: 'The number of days.'
+  workflow_name:
+    description: 'The name of the workflow'
     required: true
-    default: 90
+    default: ""
 
   keep_minimum_runs:
     description: 'The minimum runs to keep for each workflow.'
