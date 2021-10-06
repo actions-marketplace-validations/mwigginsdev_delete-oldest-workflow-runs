@@ -1,5 +1,5 @@
-# delete-workflow-runs v2
-The GitHub action to delete workflow runs in a repository. This action (written in JavaScript) wraps two Workflow Runs API:
+# delete-oldest-workflow-runs
+The GitHub action to delete oldest workflow runs for a given workflow name. This action (written in JavaScript) wraps two Workflow Runs API:
 * [**List repository workflows**](https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-repository-workflows) -- Lists the workflows in a repository.
 
 * [**List workflow runs**](https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-workflow-runs) -- List all workflow runs for a workflow.
