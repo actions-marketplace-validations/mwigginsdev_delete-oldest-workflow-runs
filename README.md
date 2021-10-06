@@ -1,5 +1,5 @@
 # delete-oldest-workflow-runs
-The GitHub action to deletes all workflow runs before the specified number to keep (keep_minimum_runs). This action (written in JavaScript) wraps two Workflow Runs API:
+The GitHub action to deletes all runs before the specified number to keep (keep_minimum_runs) for a specific workflow. This action (written in JavaScript) wraps two Workflow Runs API:
 * [**List repository workflows**](https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-repository-workflows) -- Lists the workflows in a repository.
 
 * [**List workflow runs**](https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-workflow-runs) -- List all workflow runs for a workflow.
@@ -34,7 +34,7 @@ The minimum runs to keep for each workflow.
 ### In manual triggered workflow, see [workflow_dispatch event](https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#workflow_dispatch).
 > In this way, you can manually trigger the workflow at any time to delete old workflow runs. <br/>
 ```yaml
-name: Delete old workflow for specific work flow
+name: Delete old runs for specific work flow
 on:
   workflow_dispatch:
     inputs:
