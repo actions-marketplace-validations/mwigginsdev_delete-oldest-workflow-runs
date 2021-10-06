@@ -4,8 +4,8 @@ async function run() {
     // Fetch all the inputs
     const token = core.getInput('token');
     const repository = core.getInput('repository');
-    const retain_days = core.getInput('retain_days');
     const keep_minimum_runs = core.getInput('keep_minimum_runs');
+    const workflow_name = core.getInput('workflow_name');
 
     // Split the input 'repository' (format {owner}/{repo}) to be {owner} and {repo}
     const splitRepository = repository.split('/');
@@ -28,45 +28,46 @@ async function run() {
         per_page: 100,
         page: page_number
       });
+     
+      const filteredRuns = response.data.workflow_runs.filter( (run, index, arr) => {
+          return run.name == workflow_name
+        })
       
-      const length = response.data.workflow_runs.length;
+      const length = filteredRuns.length;
       
-      if (length < 1) {
+      if (length < keep_minimum_runs) {
+        //don't do anything if less runs than minimum to keep
         break;
       }
       else {
-        for (index = 0; index < length; index++) {
+        
+        const isFirstPage = page_number == 1
+        var index = isFirstPage ? keep_minimum_runs : 0
+        for (index = 0; index < filteredRuns.length; index++) {
 
-          core.debug(`run id=${response.data.workflow_runs[index].id} status=${response.data.workflow_runs[index].status}`)
+          core.debug(`run id=${filteredRuns[index].id} status=${filteredRuns[index].status}`)
 
-          if(response.data.workflow_runs[index].status !== "completed") {
+          if(filteredRuns[index].status !== "completed") {
             console.log(`👻 Skipped workflow run ${response.data.workflow_runs[index].id} is in ${response.data.workflow_runs[index].status} state`);
             continue;            
           }
-
-          var created_at = new Date(response.data.workflow_runs[index].created_at);
-          var current = new Date();
-          var ELAPSE_ms = current.getTime() - created_at.getTime();
-          var ELAPSE_days = ELAPSE_ms / (1000 * 3600 * 24);
           
-          if (ELAPSE_days >= retain_days) {
-            del_runs.push(response.data.workflow_runs[index].id);
-          }
+          del_runs.push(filteredRuns[index].id);
         }
       }
       
       if (length < 100) {
+        //dont try another page if data doesn't fill the current page
         break;
       }
       page_number++;
     }
-
-    const arr_length = del_runs.length - keep_minimum_runs;
-    if (arr_length < 1) {
+    
+    if (del_runs.length < 1) {
       console.log(`No workflow runs need to be deleted.`);
     }
     else {
-      for (index = 0; index < arr_length; index++) {
+      for (index = 0; index < del_runs.length; index++) {
         // Execute the API "Delete a workflow run", see 'https://octokit.github.io/rest.js/v18#actions-delete-workflow-run'
         const run_id = del_runs[index];
 
