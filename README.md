@@ -24,7 +24,6 @@ The name of the repository where the workflow runs are on
 #### Required: YES
 #### Default: 6
 The minimum runs to keep for each workflow.
-##
 
 ### 4. `workflow_name`
 #### Required: YES
