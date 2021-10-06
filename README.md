@@ -34,7 +34,6 @@ The minimum runs to keep for each workflow.
 
 ### In manual triggered workflow, see [workflow_dispatch event](https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#workflow_dispatch).
 > In this way, you can manually trigger the workflow at any time to delete old workflow runs. <br/>
-![manual workflow](https://github.com/Mattraks/delete-workflow-runs/blob/main/img/example.PNG)
 ```yaml
 name: Delete old workflow for specific work flow
 on:
