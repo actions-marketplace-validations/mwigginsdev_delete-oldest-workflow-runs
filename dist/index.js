@@ -18,7 +18,13 @@ async function run() {
     var page_number = 1;
     var del_runs = new Array();
     const { Octokit } = require("@octokit/rest");
-    const octokit = new Octokit({ auth: token });
+    const octokit = new Octokit({ auth: token, 
+                                 log: {
+    debug: console.log,
+    info: console.log,
+    warn: console.warn,
+    error: console.error
+  } });
 
     console.log(`DELETING FROM: ${workflow_name}`);
     console.log(`MINIMUM RUNS TO KEEP: ${keep_minimum_runs}`);
@@ -58,7 +64,6 @@ async function run() {
       page_number++;
     }
     
-    console.log(`preparing to delete`)
     if (del_runs.length < 1) {
       console.log(`No workflow runs need to be deleted.`);
     }
@@ -69,7 +74,7 @@ async function run() {
         console.log(`index: ${i}`)
         const run_id = del_runs[i];
 
-        core.debug(`Deleting workflow run ${run_id}`);     
+        console.log(`Deleting workflow run ${run_id}`);
 
         await octokit.actions.deleteWorkflowRun({
           owner: repo_owner,
