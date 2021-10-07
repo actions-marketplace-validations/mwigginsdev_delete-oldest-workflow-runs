@@ -58,11 +58,13 @@ async function run() {
       page_number++;
     }
     
+    console.log(`preparing to delete`)
     if (del_runs.length < 1) {
       console.log(`No workflow runs need to be deleted.`);
     }
     else {
-      for (index = 0; index < del_runs.length; index++) {
+      console.log(`Deleting ${del_runs.length} runs`)
+      for (let index = 0; index < del_runs.length; index++) {
         // Execute the API "Delete a workflow run", see 'https://octokit.github.io/rest.js/v18#actions-delete-workflow-run'
         const run_id = del_runs[index];
 
