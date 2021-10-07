@@ -40,31 +40,21 @@ async function run() {
       
       console.log(`Filtered Runs Length: ${length}`)
       
-      if (length < keep_minimum_runs) {
-        //don't do anything if less runs than minimum to keep
-        break;
+      const isFirstPage = page_number == 1
+      console.log(`isFirstPage: ${isFirstPage}`)
+      if (isFirstPage) {
+        filteredRuns.splice(0, keep_minimum_runs)
       }
-      else {
-        
-        const isFirstPage = page_number == 1
-        var index = isFirstPage ? keep_minimum_runs : 0
-        for (index = 0; index < filteredRuns.length; index++) {
-
-          core.debug(`run id=${filteredRuns[index].id} status=${filteredRuns[index].status}`)
-
-          if(filteredRuns[index].status !== "completed") {
-            console.log(`👻 Skipped workflow run ${response.data.workflow_runs[index].id} is in ${response.data.workflow_runs[index].status} state`);
-            continue;            
-          }
-          
-          del_runs.push(filteredRuns[index].id);
-        }
-      }
+      
+      del_runs.push.apply(del_runs, filteredRuns);
+      
+      console.log(`Runs to delete ${del_runs.length}`)
       
       if (length < 100) {
         //dont try another page if data doesn't fill the current page
         break;
       }
+      
       page_number++;
     }
     
