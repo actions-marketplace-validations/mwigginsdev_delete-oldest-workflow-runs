@@ -20,6 +20,9 @@ async function run() {
     const { Octokit } = require("@octokit/rest");
     const octokit = new Octokit({ auth: token });
 
+    console.log(`DELETING FROM: ${workflow_name}`);
+    console.log(`MINIMUM RUNS TO KEEP: ${keep_minimum_runs}`);
+    
     while (true) {
       // Execute the API "List workflow runs for a repository", see 'https://octokit.github.io/rest.js/v18#actions-list-workflow-runs-for-repo'     
       const response = await octokit.actions.listWorkflowRunsForRepo({
@@ -34,6 +37,8 @@ async function run() {
         })
       
       const length = filteredRuns.length;
+      
+      console.log(`Filtered Runs Length: ${length}`)
       
       if (length < keep_minimum_runs) {
         //don't do anything if less runs than minimum to keep
@@ -82,7 +87,7 @@ async function run() {
         console.log(`🚀 Delete workflow run ${run_id}`);
       }
 
-      console.log(`✅ ${arr_length} workflow runs are deleted.`);
+      console.log(`✅ ${del_runs.length} workflow runs are deleted.`);
     }
   }
   catch (error) {
