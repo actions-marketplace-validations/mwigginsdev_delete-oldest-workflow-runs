@@ -18,13 +18,7 @@ async function run() {
     var page_number = 1;
     var del_runs = new Array();
     const { Octokit } = require("@octokit/rest");
-    const octokit = new Octokit({ auth: token, 
-                                 log: {
-    debug: console.log,
-    info: console.log,
-    warn: console.warn,
-    error: console.error
-  } });
+    const octokit = new Octokit({ auth: token });
 
     console.log(`DELETING FROM: ${workflow_name}`);
     console.log(`MINIMUM RUNS TO KEEP: ${keep_minimum_runs}`);
@@ -54,8 +48,6 @@ async function run() {
       
       del_runs.push.apply(del_runs, filteredRuns);
       
-      console.log(`Runs to delete ${del_runs.length}`)
-      
       if (length < 100) {
         //dont try another page if data doesn't fill the current page
         break;
@@ -71,10 +63,7 @@ async function run() {
       console.log(`Deleting ${del_runs.length} runs`)
       for (let i = 0; i < del_runs.length; i++) {
         // Execute the API "Delete a workflow run", see 'https://octokit.github.io/rest.js/v18#actions-delete-workflow-run'
-        console.log(`index: ${i}`)
-        const run_id = del_runs[i];
-
-        console.log(`Deleting workflow run ${run_id}`);
+        const run_id = del_runs[i].id;
 
         await octokit.actions.deleteWorkflowRun({
           owner: repo_owner,
